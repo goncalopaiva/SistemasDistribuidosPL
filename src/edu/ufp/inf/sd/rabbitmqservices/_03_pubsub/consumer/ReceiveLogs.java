@@ -116,7 +116,7 @@ public class ReceiveLogs {
             }); */
 
         } catch (Exception e) {
-            //Logger.getLogger(Recv.class.getName()).log(Level.INFO, e.toString());
+            Logger.getLogger(ReceiveLogs.class.getName()).log(Level.INFO, e.toString());
             e.printStackTrace();
         }
     }
