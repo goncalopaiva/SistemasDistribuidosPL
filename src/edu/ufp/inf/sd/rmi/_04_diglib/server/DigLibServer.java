@@ -2,13 +2,8 @@ package edu.ufp.inf.sd.rmi._04_diglib.server;
 
 import edu.ufp.inf.sd.rmi.util.rmisetup.SetupContextRMI;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
-import java.util.Properties;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,7 +77,7 @@ public class DigLibServer {
             if (registry != null) {
                 //============ Create Servant ============
                 digLibFactoryRI = new DigLibFactoryImpl();
-                digLibSessionRI = new DigLibSessionImpl();
+                //digLibSessionRI = new DigLibSessionImpl();
 
 
                 //Get service url (including servicename)
@@ -91,7 +86,7 @@ public class DigLibServer {
 
                 //============ Rebind servant ============
                 registry.rebind(serviceUrl, digLibFactoryRI);
-                registry.rebind(serviceUrl, digLibSessionRI);
+                //registry.rebind(serviceUrl, digLibSessionRI);
 
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "service bound and running. :)");
             } else {

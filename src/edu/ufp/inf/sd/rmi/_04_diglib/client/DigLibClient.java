@@ -1,13 +1,13 @@
 package edu.ufp.inf.sd.rmi._04_diglib.client;
 
-import edu.ufp.inf.sd.rmi._01_helloworld.server.HelloWorldRI;
 import edu.ufp.inf.sd.rmi._04_diglib.server.Book;
 import edu.ufp.inf.sd.rmi._04_diglib.server.DigLibFactoryRI;
 import edu.ufp.inf.sd.rmi._04_diglib.server.DigLibSessionRI;
 import edu.ufp.inf.sd.rmi.util.rmisetup.SetupContextRMI;
-import java.rmi.RemoteException;
+
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 import java.util.logging.Level;
