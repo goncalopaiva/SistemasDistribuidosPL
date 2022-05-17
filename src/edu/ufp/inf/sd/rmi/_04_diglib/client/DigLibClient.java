@@ -9,7 +9,6 @@ import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,33 +28,33 @@ import java.util.logging.Logger;
 public class DigLibClient {
 
     /**
-     * Context for connecting a RMI client MAIL_TO_ADDR a RMI Servant
+     * Context for connecting a RMI client to a RMI Servant
      */
     private SetupContextRMI contextRMI;
     /**
      * Remote interface that will hold the Servant proxy
      */
-    private DigLibSessionRI digLibSessionRI;
     private DigLibFactoryRI digLibFactoryRI;
+    private DigLibSessionRI digLibSessionRI;
 
     public static void main(String[] args) {
         if (args != null && args.length < 2) {
-            System.err.println("usage: java [options] edu.ufp.sd.inf.rmi._01_helloworld.server.HelloWorldClient <rmi_registry_ip> <rmi_registry_port> <service_name>");
+            System.err.println("usage: java [options] edu.ufp.sd.DigLab.server.DigLibClient <rmi_registry_ip> <rmi_registry_port> <service_name>");
             System.exit(-1);
         } else {
             //1. ============ Setup client RMI context ============
-            DigLibClient dlc = new DigLibClient(args);
+            DigLibClient hwc = new DigLibClient(args);
             //2. ============ Lookup service ============
-            dlc.lookupService();
+            hwc.lookupService();
             //3. ============ Play with service ============
-            dlc.playService();
+            hwc.playService();
         }
     }
 
     public DigLibClient(String args[]) {
         try {
             //List ans set args
-            SetupContextRMI.printArgs(this.getClass().getName(), args);
+            printArgs(args);
             String registryIP = args[0];
             String registryPort = args[1];
             String serviceName = args[2];
@@ -68,16 +67,17 @@ public class DigLibClient {
 
     private Remote lookupService() {
         try {
-            //Get proxy MAIL_TO_ADDR rmiregistry
+            //Get proxy to rmiregistry
             Registry registry = contextRMI.getRegistry();
             //Lookup service on rmiregistry and wait for calls
             if (registry != null) {
                 //Get service url (including servicename)
                 String serviceUrl = contextRMI.getServicesUrl(0);
-                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going MAIL_TO_ADDR lookup service @ {0}", serviceUrl);
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going to lookup service @ {0}", serviceUrl);
 
-                //============ Get proxy MAIL_TO_ADDR HelloWorld service ============
+                //============ Get proxy to DigLab service ============
                 digLibFactoryRI = (DigLibFactoryRI) registry.lookup(serviceUrl);
+
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "registry not bound (check IPs). :(");
                 //registry = LocateRegistry.createRegistry(1099);
@@ -90,113 +90,23 @@ public class DigLibClient {
 
     private void playService() {
         try {
-            System.out.println("***** DIGITAL LIBRARY *****");
-            //loginMenu();
-            //menuOptions();
-            //searchBook();
+            //============ Call DigLab remote service ============
+            digLibSessionRI = this.digLibFactoryRI.login("guest", "ufp");
+            Book[] books = this.digLibSessionRI.search("Distributed", "Tanenbaum");
 
-
-            String title, author;
-            Scanner input = new Scanner(System.in);
-
-            System.out.println();
-            System.out.println("*** SEARCH BOOK ***");
-
-            System.out.println();
-            System.out.println("What is the title of the book? ");
-            title = input.next();
-
-            System.out.println();
-            System.out.println("What is the author of the book? ");
-            author = input.next();
-
-            Book[] books;
-            books = this.digLibSessionRI.search(title, author);
-
-            if (books.length == 0) {
-                System.out.println("There is no match.");
-            } else {
-                int i = 0;
-                for (Book b : books) {
-                    System.out.println();
-                    System.out.println("Match #" + i);
-                    System.out.println("\tTitle: " + b.getTitle());
-                    System.out.println("\tAuthor: " + b.getAuthor());
-                }
+            for (int i = 0; i < books.length; i++) {
+                System.out.println(books[i].getAuthor() + "\t" + books[i].getTitle());
             }
 
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "goint to finish, bye. ;)");
         } catch (RemoteException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void loginMenu() throws RemoteException {
-        String username, password;
-        Scanner input = new Scanner(System.in);
-
-        System.out.println();
-        System.out.println("*** LOGIN ***");
-        System.out.print("\tLogin: ");
-        username = input.next();
-        System.out.print("\tPassword: ");
-        password = input.next();
-
-        digLibFactoryRI.login(username, password);
-
-        System.out.println();
-        System.out.println("Hello, " + username);
-    }
-
-    private void menuOptions() throws RemoteException {
-        char opt;
-        Scanner input = new Scanner(System.in);
-
-        System.out.println();
-        System.out.println("What do you want to do today? ");
-        System.out.println("1. Search a book.");
-        System.out.println("2. Insert a book.");
-        opt = input.next().charAt(0);
-
-        if (opt == 1) {
-            searchBook();
-        }
-        else if (opt == 2) {
-            //Insert a new book
-            System.out.println("Insert new book is not available at the moment.");
-        }
-
-    }
-
-    private void searchBook() throws RemoteException {
-        String title, author;
-        Scanner input = new Scanner(System.in);
-
-        System.out.println();
-        System.out.println("*** SEARCH BOOK ***");
-
-        System.out.println();
-        System.out.println("What is the title of the book? ");
-        title = input.next();
-
-        System.out.println();
-        System.out.println("What is the author of the book? ");
-        author = input.next();
-
-        Book[] books;
-        books = this.digLibSessionRI.search(title, author);
-
-        if (books.length == 0) {
-            System.out.println("There is no match.");
-        } else {
-            int i = 0;
-            for (Book b : books) {
-                System.out.println();
-                System.out.println("Match #" + i);
-                System.out.println("\tTitle: " + b.getTitle());
-                System.out.println("\tAuthor: " + b.getAuthor());
-            }
+    private void printArgs(String args[]) {
+        for (int i = 0; args != null && i < args.length; i++) {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "args[{0}] = {1}", new Object[]{i, args[i]});
         }
     }
-
-
 }

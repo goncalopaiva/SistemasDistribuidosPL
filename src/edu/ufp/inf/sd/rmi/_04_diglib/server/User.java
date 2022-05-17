@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package edu.ufp.inf.sd.rmi._04_diglib.server;
 
 /**

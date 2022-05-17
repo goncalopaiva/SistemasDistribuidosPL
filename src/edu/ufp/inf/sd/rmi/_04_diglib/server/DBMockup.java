@@ -1,6 +1,7 @@
 package edu.ufp.inf.sd.rmi._04_diglib.server;
 
-import java.util.ArrayList;
+
+import java.util.Vector;
 
 /**
  * This class simulates a DBMockup for managing users and books.
@@ -10,20 +11,17 @@ import java.util.ArrayList;
  */
 public class DBMockup {
 
-    private final ArrayList<Book> books;// = new ArrayList();
-    private final ArrayList<User> users;// = new ArrayList();
+    private Vector<Book> books = new Vector();
+    private Vector<User> users = new Vector();
 
     /**
-     * This constructor creates and inits the database with some books and users.
+     * This constructor inits the database with some books and users.
      */
     public DBMockup() {
-        books = new ArrayList();
-        users = new ArrayList();
-        //Add 3 books
         books.add(new Book("Distributed Systems: principles and paradigms", "Tanenbaum"));
         books.add(new Book("Distributed Systems: concepts and design", "Colouris"));
         books.add(new Book("Distributed Computing Networks", "Tanenbaum"));
-        //Add one user
+
         users.add(new User("guest", "ufp"));
     }
 
@@ -75,7 +73,7 @@ public class DBMockup {
      */
     public Book[] select(String t, String a) {
         Book[] abooks = null;
-        ArrayList<Book> vbooks = new ArrayList();
+        Vector<Book> vbooks = new Vector();
         // Find books that match
         for (int i = 0; i < books.size(); i++) {
             Book book = (Book) books.get(i);

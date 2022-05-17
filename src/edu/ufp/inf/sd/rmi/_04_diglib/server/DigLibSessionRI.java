@@ -5,17 +5,7 @@ import java.rmi.RemoteException;
 
 public interface DigLibSessionRI extends Remote {
 
-    /**
-     * Search books
-     * @param title - title of the book
-     * @param author - author of the book
-     * @return
-     * @throws RemoteException
-     */
-    Book[] search(String title, String author) throws RemoteException;
+    public Book[] search(String a, String b) throws RemoteException;
 
-    void logout() throws RemoteException;
-
-
-
+    public void logout() throws RemoteException;
 }

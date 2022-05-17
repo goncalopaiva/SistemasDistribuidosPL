@@ -16,5 +16,6 @@
     <orderEntry type="library" name="amqp-client-5.9.0" level="project" />
     <orderEntry type="library" name="javax.activation-1.2.0" level="project" />
     <orderEntry type="library" name="javax.mail-1.6.21" level="project" />
+    <orderEntry type="library" name="json-20210307" level="project" />
   </component>
 </module>
